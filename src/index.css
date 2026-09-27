@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+  ::selection {
+    background: #d2e3fc;
+  }
+}
+
+@layer components {
+  /* Material-style buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 h-9 text-sm font-medium tracking-wide transition-colors disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply btn bg-gblue text-white hover:bg-[#1765cc] hover:shadow-card;
+  }
+  .btn-outline {
+    @apply btn border border-line text-gblue hover:bg-gblue-soft/60;
+  }
+  .btn-text {
+    @apply btn px-3 text-gblue hover:bg-gblue-soft/60;
+  }
+  .btn-danger {
+    @apply btn bg-gred text-white hover:bg-[#c5221f];
+  }
+  .icon-btn {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-full text-ink-3 transition-colors hover:bg-black/5;
+  }
+
+  /* Outlined Material text field */
+  .field {
+    @apply w-full rounded-md border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-5 focus:border-gblue focus:ring-1 focus:ring-gblue;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-medium text-ink-3;
+  }
+
+  /* The small letter-spaced caption used above cards ("5 MINUTES") */
+  .eyebrow {
+    @apply text-[10px] font-bold uppercase tracking-[0.12em] text-ink-2;
+  }
+
+  .panel {
+    @apply rounded-lg border border-line bg-white;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium;
+  }
+}
+
+/* Thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #dadce0 transparent;
+}
+
+/* Remote cursor labels in Monaco (colors injected at runtime) */
+.remote-cursor {
+  border-left: 2px solid var(--c, #1a73e8);
+  margin-left: -1px;
+}
+.remote-selection {
+  opacity: 0.25;
+}
+
+@keyframes blink-dot {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+.typing-dot {
+  animation: blink-dot 1.2s infinite both;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
