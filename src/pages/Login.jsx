@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthShell from '../components/AuthShell.jsx';
+import ServerStatus from '../components/ServerStatus.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { errorMessage } from '../api/client.js';
 import { greeting } from '../lib/utils.js';
@@ -28,7 +29,10 @@ export default function Login() {
     <AuthShell heading={`${greeting()}.`} sub="Sign in to pick up where your team left off.">
       <h2 className="text-2xl text-ink">Sign in</h2>
       <p className="mt-1 text-sm text-ink-3">to continue to TeamCollab</p>
-      <form onSubmit={submit} className="mt-8 space-y-5">
+      <div className="mt-6">
+        <ServerStatus />
+      </div>
+      <form onSubmit={submit} className="space-y-5">
         <div>
           <label className="label" htmlFor="email">Email</label>
           <input id="email" type="email" className="field" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required autoFocus />

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext.jsx';
+import { SOCKET_URL } from '../config.js';
 
 const SocketContext = createContext({ socket: null, connected: false });
 
@@ -12,7 +13,7 @@ export function SocketProvider({ children }) {
 
   useEffect(() => {
     if (!token) return undefined;
-    const s = io(import.meta.env.VITE_SOCKET_URL || '/', {
+    const s = io(SOCKET_URL, {
       auth: { token },
       transports: ['websocket', 'polling'],
     });

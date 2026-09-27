@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL, BACKEND_URL } from '../config.js';
 
 export const TOKEN_KEY = 'teamcollab_token';
 
@@ -10,7 +11,9 @@ export const getToken = () => {
   }
 };
 
-const api = axios.create({ baseURL: import.meta.env.VITE_API_URL || '/api' });
+// 60 s covers free-tier hosts that sleep and take ~30-50 s to wake up; without a timeout a
+// request to an unreachable backend just hangs and the UI looks frozen.
+const api = axios.create({ baseURL: API_URL, timeout: 60000 });
 
 api.interceptors.request.use((config) => {
   const token = getToken();
@@ -18,8 +21,26 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// If the request hit the frontend host instead of the API, it gets index.html back
+api.interceptors.response.use((res) => {
+  if (typeof res.data === 'string' && /^\s*<!doctype html/i.test(res.data)) {
+    return Promise.reject(Object.assign(new Error('The API returned a web page instead of data — VITE_BACKEND_URL is probably not pointing at the backend.'), { isConfig: true }));
+  }
+  return res;
+});
+
 // Normalise errors to a readable message
-export const errorMessage = (err) => err?.response?.data?.message || err?.message || 'Something went wrong';
+export const errorMessage = (err) => {
+  if (err?.response?.data?.message) return err.response.data.message;
+  if (err?.isConfig) return err.message;
+  const where = BACKEND_URL || window.location.origin;
+  if (err?.code === 'ECONNABORTED') return `The server at ${where} did not respond in time. If it is on a free host it may be waking up — try again in a minute.`;
+  if (err?.code === 'ERR_NETWORK' || (err?.request && !err?.response)) {
+    return `Can't reach the server at ${where}. It may be down, still starting, or blocking this site (CORS).`;
+  }
+  if (err?.response?.status === 404) return `API route not found at ${where} — check VITE_BACKEND_URL.`;
+  return err?.message || 'Something went wrong';
+};
 
 // Convenience wrappers scoped to a workspace
 export const wsApi = (workspaceId) => {

@@ -10,6 +10,7 @@ import EmptyState from '../components/ui/EmptyState.jsx';
 import { useToast } from '../components/ui/Toast.jsx';
 import { FilesArt } from '../components/illustrations/Illustrations.jsx';
 import { cx, formatBytes, formatDate, plural } from '../lib/utils.js';
+import { assetUrl } from '../config.js';
 
 function iconFor(file) {
   const t = `${file.fileType} ${file.fileName}`.toLowerCase();
@@ -130,7 +131,7 @@ export default function Files() {
                   return (
                     <tr key={f._id} className="group hover:bg-surface/70">
                       <td className="max-w-0 px-4 py-3 sm:px-5">
-                        <a href={f.fileUrl} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-ink hover:text-gblue">
+                        <a href={assetUrl(f.fileUrl)} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-ink hover:text-gblue">
                           <Icon size={20} className={cx('shrink-0', color)} />
                           <span className="min-w-0">
                             <span className="block truncate">{f.fileName}</span>
@@ -150,7 +151,7 @@ export default function Files() {
                       <td className="hidden whitespace-nowrap px-5 py-3 text-right tabular-nums text-ink-3 sm:table-cell">{formatBytes(f.fileSize)}</td>
                       <td className="px-3 py-3 sm:px-5">
                         <div className="flex justify-end gap-1">
-                          <a href={f.fileUrl} download={f.fileName} className="icon-btn h-8 w-8" aria-label={`Download ${f.fileName}`}>
+                          <a href={assetUrl(f.fileUrl)} download={f.fileName} className="icon-btn h-8 w-8" aria-label={`Download ${f.fileName}`}>
                             <Download size={16} />
                           </a>
                           {canDelete && (

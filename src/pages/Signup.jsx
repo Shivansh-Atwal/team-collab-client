@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthShell from '../components/AuthShell.jsx';
+import ServerStatus from '../components/ServerStatus.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { errorMessage } from '../api/client.js';
 
@@ -28,7 +29,10 @@ export default function Signup() {
     <AuthShell heading="Welcome to TeamCollab." sub="One workspace for your whole team.">
       <h2 className="text-2xl text-ink">Create your account</h2>
       <p className="mt-1 text-sm text-ink-3">It takes less than a minute</p>
-      <form onSubmit={submit} className="mt-8 space-y-5">
+      <div className="mt-6">
+        <ServerStatus />
+      </div>
+      <form onSubmit={submit} className="space-y-5">
         <div>
           <label className="label" htmlFor="name">Full name</label>
           <input id="name" className="field" value={form.name} onChange={set('name')} autoComplete="name" required autoFocus />

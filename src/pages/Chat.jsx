@@ -9,12 +9,14 @@ import Avatar from '../components/ui/Avatar.jsx';
 import EmptyState from '../components/ui/EmptyState.jsx';
 import { useToast } from '../components/ui/Toast.jsx';
 import { ChatArt } from '../components/illustrations/Illustrations.jsx';
+import { assetUrl } from '../config.js';
 import { attachmentName, cx, dayLabel, formatTime, isImage, pageLabel } from '../lib/utils.js';
 
 const GROUP_WINDOW = 5 * 60 * 1000;
 
-function Attachment({ url }) {
-  const name = attachmentName(url);
+function Attachment({ url: path }) {
+  const name = attachmentName(path);
+  const url = assetUrl(path);
   if (isImage(name)) {
     return (
       <a href={url} target="_blank" rel="noreferrer" className="mt-1 block">

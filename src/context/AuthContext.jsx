@@ -25,9 +25,12 @@ export function AuthProvider({ children }) {
     api
       .get('/auth/me')
       .then(({ data }) => setUser(data.user))
-      .catch(() => {
-        storeToken(null);
-        setToken(null);
+      .catch((err) => {
+        // Only a rejected token logs you out; a sleeping/unreachable server should not
+        if (err?.response?.status === 401) {
+          storeToken(null);
+          setToken(null);
+        }
       })
       .finally(() => setLoading(false));
     // Only validate the token we started with
